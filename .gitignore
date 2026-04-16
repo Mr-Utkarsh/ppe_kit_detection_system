@@ -1,0 +1,21 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+venv/
+.env
+.venv
+env/
+
+# Data and Models
+construction_dataset/
+runs/
+*.pt
+
+# macOS
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
