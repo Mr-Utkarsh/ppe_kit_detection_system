@@ -15,6 +15,7 @@ st.set_page_config(
 def load_yolo_model():
     # Attempt to load the custom-trained PPE model first
     possible_paths = [
+        "model/best.pt",
         "model/construction_train/weights/best.pt",
         "model/construction_train/best.pt",
         "runs/detect/model/construction_train2/weights/best.pt"
