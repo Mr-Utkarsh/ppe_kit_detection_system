@@ -4,7 +4,6 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 import os
-import gdown
 
 st.set_page_config(
     page_title="PPE Detection",
@@ -14,25 +13,8 @@ st.set_page_config(
 
 @st.cache_resource
 def load_yolo_model():
-    model_path = "model/best.pt"
-    
-    # If the model is not found locally, download it directly from Google Drive
-    if not os.path.exists(model_path):
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        file_id = "1grn2HPMzbjUg-bMzWt0WfdTy_mQn_a4g"
-        url = f"https://drive.google.com/uc?id={file_id}"
-        
-        try:
-            gdown.download(url, model_path, quiet=False)
-        except Exception:
-            pass # Fallback below if download fails
-    
-    # Check if download succeeded or if it was already there
-    if os.path.exists(model_path):
-        return YOLO(model_path), True
-    
-    # Absolute Fallback to the generic pre-trained model if no internet / failed
-    return YOLO("model/yolov8n.pt"), False
+    is_custom = os.path.exists("model/best.pt")
+    return YOLO("model/best.pt" if is_custom else "model/yolov8n.pt"), is_custom
 
 def main():
     st.title("PPE & Safety Equipment Detection System")
@@ -41,7 +23,7 @@ def main():
     model, is_custom = load_yolo_model()
     
     if not is_custom:
-        st.warning("⚠️ **Custom model not found.** Using generic YOLOv8 nano (detects general objects). Please train the custom model using `src/train.ipynb` to detect PPE.")
+        st.warning("Custom weights not found. Using base YOLOv8n. Run train.ipynb to train the PPE model.")
     
     st.sidebar.header("Configuration")
     confidence_threshold = st.sidebar.slider(

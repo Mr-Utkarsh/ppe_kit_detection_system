@@ -13,6 +13,7 @@ env/
 construction_dataset/
 runs/
 *.pt
+!model/best.pt
 *.zip
 
 # macOS

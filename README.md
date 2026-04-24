@@ -28,5 +28,4 @@ To start the web application locally:
 streamlit run app.py
 ```
 The application will launch on `localhost:8501`. 
-*Note: You must run the `src/train.ipynb` notebook to train the custom PPE detection model. Until then, the app will gracefully fall back to the generic YOLOv8 nano model and show a warning.*
-# ppe_kit_detection_system
+*Note: Run the `src/train.ipynb` notebook to train the custom PPE detection model. Otherwise, the app falls back to the base YOLOv8n model.*
