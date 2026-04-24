@@ -3,24 +3,38 @@ import cv2
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
+import os
 
 st.set_page_config(
-    page_title="Object Detection",
+    page_title="PPE Detection",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Cache the model load so it doesn't try to pull it from disk
-# every time the user clicks a button or moves the slider.
 @st.cache_resource
 def load_yolo_model():
-    return YOLO("model/yolov8n.pt")
+    # Attempt to load the custom-trained PPE model first
+    possible_paths = [
+        "model/construction_train/weights/best.pt",
+        "model/construction_train/best.pt",
+        "runs/detect/model/construction_train2/weights/best.pt"
+    ]
+    
+    for path in possible_paths:
+        if os.path.exists(path):
+            return YOLO(path), True
+    
+    # Fallback to the generic pre-trained model
+    return YOLO("model/yolov8n.pt"), False
 
 def main():
-    st.title("Object Detection System")
-    st.markdown("Object detection using YOLOv8. Upload an image to analyze it.")
+    st.title("PPE & Safety Equipment Detection System")
+    st.markdown("Construction site safety monitoring using YOLOv8. Upload an image to analyze it.")
     
-    model = load_yolo_model()
+    model, is_custom = load_yolo_model()
+    
+    if not is_custom:
+        st.warning("⚠️ **Custom model not found.** Using generic YOLOv8 nano (detects general objects). Please train the custom model using `src/train.ipynb` to detect PPE.")
     
     st.sidebar.header("Configuration")
     confidence_threshold = st.sidebar.slider(
