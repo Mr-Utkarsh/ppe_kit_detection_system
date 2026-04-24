@@ -25,13 +25,6 @@ def main():
     if not is_custom:
         st.warning("Custom weights not found. Using base YOLOv8n. Run train.ipynb to train the PPE model.")
     
-    st.sidebar.header("Configuration")
-    confidence_threshold = st.sidebar.slider(
-        "Confidence Threshold", 
-        min_value=0.0, max_value=1.0, value=0.25, step=0.05,
-        help="Adjust the minimum confidence score required for detections."
-    )
-    
     st.header("File Upload")
     uploaded_file = st.file_uploader("Choose an image", type=["png", "jpg", "jpeg", "webp"])
     
@@ -39,7 +32,7 @@ def main():
         image = Image.open(uploaded_file)
         
         with st.spinner("Processing..."):
-            results = model.predict(image, conf=confidence_threshold, verbose=False)
+            results = model.predict(image, conf=0.25, verbose=False)
             
             annotated_img = results[0].plot()
             annotated_img = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
