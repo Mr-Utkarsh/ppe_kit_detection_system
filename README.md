@@ -1,9 +1,9 @@
-# Object Detection System
+# PPE & Safety Equipment Detection System
 
-A simple object detection application using YOLOv8 and Streamlit. It analyzes static images to identify and localize objects within them.
+A safety monitoring application using YOLOv8 and Streamlit. It analyzes construction site images to identify and localize Personal Protective Equipment (PPE) like hardhats, safety vests, masks, and gloves.
 
 ## Features
-- Fast object detection using YOLOv8 nano
+- Fast object detection using custom-trained YOLOv8
 - Clean web dashboard interface via Streamlit
 - Drag and drop local image uploads for instant analysis
 
@@ -11,8 +11,8 @@ A simple object detection application using YOLOv8 and Streamlit. It analyzes st
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-username/Object_Detection_System.git
-cd Object_Detection_System
+git clone https://github.com/your-username/PPE_Detection_System.git
+cd PPE_Detection_System
 ```
 
 2. Create a virtual environment and install dependencies:
@@ -27,4 +27,6 @@ To start the web application locally:
 ```bash
 streamlit run app.py
 ```
-The application will launch on `localhost:8501`. On the first run, the `yolov8n.pt` model weights will be automatically loaded from the `model/` directory.
+The application will launch on `localhost:8501`. 
+*Note: You must run the `src/train.ipynb` notebook to train the custom PPE detection model. Until then, the app will gracefully fall back to the generic YOLOv8 nano model and show a warning.*
+# ppe_kit_detection_system
