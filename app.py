@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 import os
+import gdown
 
 st.set_page_config(
     page_title="PPE Detection",
@@ -13,19 +14,24 @@ st.set_page_config(
 
 @st.cache_resource
 def load_yolo_model():
-    # Attempt to load the custom-trained PPE model first
-    possible_paths = [
-        "model/best.pt",
-        "model/construction_train/weights/best.pt",
-        "model/construction_train/best.pt",
-        "runs/detect/model/construction_train2/weights/best.pt"
-    ]
+    model_path = "model/best.pt"
     
-    for path in possible_paths:
-        if os.path.exists(path):
-            return YOLO(path), True
+    # If the model is not found locally, download it directly from Google Drive
+    if not os.path.exists(model_path):
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        file_id = "1grn2HPMzbjUg-bMzWt0WfdTy_mQn_a4g"
+        url = f"https://drive.google.com/uc?id={file_id}"
+        
+        try:
+            gdown.download(url, model_path, quiet=False)
+        except Exception:
+            pass # Fallback below if download fails
     
-    # Fallback to the generic pre-trained model
+    # Check if download succeeded or if it was already there
+    if os.path.exists(model_path):
+        return YOLO(model_path), True
+    
+    # Absolute Fallback to the generic pre-trained model if no internet / failed
     return YOLO("model/yolov8n.pt"), False
 
 def main():
